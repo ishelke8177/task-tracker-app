@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 /**
  * *Component for displaying single Task
  */
-const Task = ({ taskDetails }) => {
+const Task = ({ taskDetails, handleDragStart, handleDragEnd, handleDragOver, handleDrop }) => {
   const dispatch = useDispatch();
 
   const deleteHandler = async () => {
@@ -25,8 +25,15 @@ const Task = ({ taskDetails }) => {
   }
 
   return (
-    <div className="w-full px-4 py-4 shadow-md rounded flex flex-col gap-2 bg-white">
-      <h2 className="font-semibold">{taskDetails.title}</h2>
+    <div 
+      draggable="true"
+      onDragStart={(e) => handleDragStart(e, taskDetails)}
+      onDragEnd={handleDragEnd} 
+      onDragOver={handleDragOver} 
+      onDrop={(e) => handleDrop(e, taskDetails)} 
+      className="w-full px-4 py-4 shadow-md rounded flex flex-col gap-2 bg-white"
+    >
+      <h2 className="font-semibold">{taskDetails.id + ". "}{taskDetails.title}</h2>
       <p>{taskDetails.description}</p>
       <div className="flex justify-between gap-2">
         <button

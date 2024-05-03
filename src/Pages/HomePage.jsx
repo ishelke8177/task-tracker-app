@@ -9,6 +9,7 @@ const HomePage = () => {
   const { tasksArr , isLoading } = taskItems
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState("all");
+  const [draggingItem, setDraggingItem] = useState();
   const dispatch = useDispatch();
 
   const statusHandler = (e) => {
@@ -45,6 +46,34 @@ const HomePage = () => {
     setTasks(filteredTasks);
   }, [tasksArr, searchTerm]);
 
+  const handleDragStart = (e, item) => { 
+    setDraggingItem(item); 
+    e.dataTransfer.setData('text/plain', ''); 
+  }; 
+
+  const handleDragEnd = () => { 
+    setDraggingItem(null); 
+  }; 
+
+  const handleDragOver = (e) => { 
+    e.preventDefault(); 
+  }; 
+
+  const handleDrop = (e, targetItem) => { 
+    if (!draggingItem) return; 
+
+    const currentIndex = tasks.indexOf(draggingItem); 
+    const targetIndex = tasks.indexOf(targetItem); 
+
+    if (currentIndex !== -1 && targetIndex !== -1) { 
+      const updatedTasks = [...tasks];
+      const draggedTask = updatedTasks[currentIndex];
+      updatedTasks[currentIndex] = updatedTasks[targetIndex];
+      updatedTasks[targetIndex] = draggedTask;
+      setTasks(updatedTasks);
+    } 
+  }; 
+
   return (
     <>
       <div className="w-full mx-4 md:w-1/2  flex flex-col mt-4">
@@ -72,7 +101,16 @@ const HomePage = () => {
         <div className="w-full justify-center flex flex-wrap my-4 gap-4">
           {isLoading && <Loader />}
           {tasks?.length > 0 ? (
-            tasks?.map((taskD) => <Task key={taskD?.id} taskDetails={taskD} />)
+            tasks?.map((taskD) => 
+                <Task 
+                  key={taskD?.id}
+                  handleDragStart={handleDragStart}
+                  handleDragEnd={handleDragEnd} 
+                  handleDragOver={handleDragOver} 
+                  handleDrop={handleDrop}
+                  taskDetails={taskD} 
+                />
+          )
           ) : (
             <Message message="No Tasks Found" />
           )}
