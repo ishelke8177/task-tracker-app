@@ -23,10 +23,6 @@ export const deleteTask = createAsyncThunk("deleteTask", async (taskId) => {
 });
 
 export const updateTaskStatus = createAsyncThunk("updateTaskStatus", async ({id, newTaskObj}) => {
-    console.log('newTaskObj-> ', newTaskObj);
-    console.log('id-> ', id);
     const resp = await axios.put(`${config.HOST_LINK}/${id}`, newTaskObj)
-    console.log('updateTaskStatus->resp?.data', resp?.data);
     return resp?.data;
-    // return {id: id};
 });

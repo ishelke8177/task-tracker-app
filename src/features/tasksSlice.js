@@ -53,9 +53,7 @@ const tasksSlice = createSlice({
         builder.addCase(deleteTask.fulfilled, (state, action) => {
             state.isLoading = false;
             const deletedItemId = action.payload.id;
-            console.log('slice->task Id: ', deletedItemId);
             state.tasksArr = state.tasksArr.filter(task => task.id !== deletedItemId);
-            console.log('state.tasksArr',state.tasksArr);
         })
         builder.addCase(deleteTask.rejected, (state, action) => {
             state.isError = true;
@@ -67,7 +65,6 @@ const tasksSlice = createSlice({
         })
         builder.addCase(updateTaskStatus.fulfilled, (state, action) => {
             state.isLoading = false;
-            console.log('update payload-> ', action.payload);
             const taskId = action.payload.id;
             const isCompleted = action.payload.completed
             state.tasksArr = state.tasksArr.map(task => {

@@ -10,7 +10,6 @@ const Task = ({ taskDetails }) => {
   const dispatch = useDispatch();
 
   const deleteHandler = async () => {
-    console.log('taskDetails ', taskDetails);
     dispatch(deleteTask(taskDetails.id))
   };
 
